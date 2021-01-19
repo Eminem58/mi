@@ -1,0 +1,135 @@
+package ${package.Controller};
+
+##import com.baomidou.mybatisplus.core.conditions.interfaces.Func;
+##import com.baomidou.mybatisplus.core.conditions.query.Query;
+##import com.baomidou.mybatisplus.core.metadata.IPage;
+##import com.baomidou.mybatisplus.extension.api.R;
+##import ${package.Entity}.${entity};
+###set($voPackage=$package.Entity.replace("entity","vo"))
+##import $!{voPackage}.$!{entity}VO;
+##import ${package.Service}.${table.serviceName};
+##import io.swagger.annotations.ApiOperation;
+##import io.swagger.annotations.ApiParam;
+import org.springframework.web.bind.annotation.*;
+
+#if(${superControllerClassPackage})
+import ${superControllerClassPackage};
+#end
+
+##import javax.annotation.Resource;
+##import javax.validation.Valid;
+
+
+
+/**
+ * <p>
+ * $!{table.comment} 前端控制器
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+#if(${restControllerStyle})
+@RestController
+#else
+@Controller
+#end
+@RequestMapping("#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end")
+#if(${kotlin})
+class ${table.controllerName}#if(${superControllerClass}) : ${superControllerClass}()#end
+
+#else
+#if(${superControllerClass})
+public class ${table.controllerName} extends ${superControllerClass} {
+#else
+public class ${table.controllerName} {
+#end
+##    /**
+##     * 服务对象
+##     */
+##    @Resource
+##    private $!{table.serviceName} $!{table.entityPath}Service;
+##
+##    /**
+##     * 详情
+##     */
+##    @GetMapping("/detail")
+##    @ApiOperation(value = "详情", notes = "传入$!{table.entityPath}")
+##    public R<$!{entity}> detail($!{entity} $!{table.entityPath}) {
+##        $!{entity} detail = $!{table.entityPath}Service.getOne(new QueryWrapper($!{table.entityPath}));
+##        return R.ok(detail);
+##    }
+##
+##    /**
+##     * 分页 $!{table.comment}
+##     */
+##    @GetMapping("/list")
+##    @ApiOperation(value = "分页", notes = "传入$!{table.entityPath}")
+##    public R<IPage<$!{entity}>> list($!{entity} $!{table.entityPath}, Query query) {
+##        IPage<$!{entity}> pages = $!{table.entityPath}Service.page(Condition.getPage(query), new QueryWrapper($!{table.entityPath}));
+##        return R.ok(pages);
+##    }
+##
+##    /**
+##     * 自定义分页 $!{table.comment}
+##     */
+##    @GetMapping("/page")
+##    @ApiOperation(value = "分页", notes = "传入$!{table.entityPath}")
+##    public R<IPage<$!{entity}VO>> page($!{entity}VO $!{table.entityPath}, Query query) {
+##        IPage<$!{entity}VO> pages = $!{table.entityPath}Service.select$!{entity}Page(Condition.getPage(query), $!{table.entityPath});
+##        return R.ok(pages);
+##    }
+##
+##    /**
+##     * 新增 $!{table.comment}
+##     */
+##    @PostMapping("/save")
+##    @ApiOperation(value = "新增", notes = "传入$!{table.entityPath}")
+##    public R save(@Valid @RequestBody $!{entity} $!{table.entityPath}) {
+##        return R.ok($!{table.entityPath}Service.save($!{table.entityPath}));
+##    }
+##
+##    /**
+##     * 修改 $!{table.comment}
+##     */
+##    @PostMapping("/update")
+##    @ApiOperation(value = "修改", notes = "传入$!{table.entityPath}")
+##    public R update(@Valid @RequestBody $!{entity} $!{table.entityPath}) {
+##        return R.ok($!{table.entityPath}Service.updateById($!{table.entityPath}));
+##    }
+##
+##    /**
+##     * 新增或修改 $!{table.comment}
+##     */
+##    @PostMapping("/submit")
+##    @ApiOperation(value = "新增或修改", notes = "传入$!{table.entityPath}")
+##    public R submit(@Valid @RequestBody $!{entity} $!{table.entityPath}) {
+##        return R.ok($!{table.entityPath}Service.saveOrUpdate($!{table.entityPath}));
+##    }
+##
+##    #if($!{superEntityClass})
+##
+##    /**
+##     * 删除 $!{table.comment}
+##     */
+##    @PostMapping("/remove")
+##    @ApiOperation(value = "逻辑删除", notes = "传入ids")
+##    public R remove(@ApiParam(value = "主键集合", required = true) @RequestParam String ids) {
+##        return R.ok($!{table.entityPath}Service.deleteLogic(Func.toLongList(ids)));
+##    }
+##
+##    #else
+##
+##    /**
+##     * 删除 $!{table.comment}
+##     */
+##    @PostMapping("/remove")
+##    @ApiOperation(value = "删除", notes = "传入ids")
+##    public R remove(@ApiParam(value = "主键集合", required = true) @RequestParam String ids) {
+##        return R.ok($!{table.entityPath}Service.removeByIds(Func.toStrList(ids)));
+##    }
+##
+##    #end
+}
+
+#end

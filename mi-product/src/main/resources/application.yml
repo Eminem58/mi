@@ -1,0 +1,11 @@
+server:
+  port: 8001
+spring:
+  application:
+    name: mi-product
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}:${spring.application.name}:@project.version@
+  client:
+    service-url:
+      defaultZone: http://localhost:7001/eureka

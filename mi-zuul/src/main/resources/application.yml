@@ -1,0 +1,17 @@
+server:
+  port: 7000
+spring:
+  application:
+    name: mi-zuul
+
+zuul:
+  routes:
+    mi-product:
+      path: /product/**
+      serviceId: mi-product
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}:${spring.application.name}:@project.version@
+  client:
+    service-url:
+      defaultZone: http://localhost:7001/eureka

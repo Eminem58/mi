@@ -1,0 +1,19 @@
+server:
+  port: 8003
+spring:
+  application:
+    name: mi-core
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://94.191.83.120:3308/mall?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull
+    username: root
+    password: root
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}:${spring.application.name}:@project.version@
+  client:
+    service-url:
+      defaultZone: http://localhost:7001/eureka
+
+mybatis-plus:
+  mapper-locations: classpath:com/**/*Mapper.xml

@@ -12,5 +12,11 @@
 
     <artifactId>mi-eureka</artifactId>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+            <version>2.2.2.RELEASE</version>
+        </dependency>
+    </dependencies>
 </project>
