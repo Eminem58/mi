@@ -8,6 +8,9 @@ spring:
     url: jdbc:mysql://94.191.83.120:3308/mall?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull
     username: root
     password: root
+  data:
+    mongodb:
+      uri: mongodb://192.168.0.199:27017/mi
 eureka:
   instance:
     instance-id: ${spring.cloud.client.ip-address}:${server.port}:${spring.application.name}:@project.version@

@@ -12,5 +12,16 @@
 
     <artifactId>mi-order</artifactId>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>com.mi</groupId>
+            <artifactId>mi-core</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.mi</groupId>
+            <artifactId>mi-mongo</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>
