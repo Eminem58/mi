@@ -2,11 +2,11 @@ package com.mi.sys.controller;
 
 import com.baomidou.mybatisplus.extension.api.ApiController;
 import com.baomidou.mybatisplus.extension.api.R;
-import com.baomidou.mybatisplus.extension.enums.ApiErrorCode;
-import com.mi.sys.service.IShoppingCartService;
-import com.mi.sys.vo.ShopppingGoodsAddVO;
+import com.mi.sys.service.IKillService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 秒杀模块
@@ -15,27 +15,21 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/kill")
 public class KillContoller extends ApiController {
     @Autowired
-    private IShoppingCartService shoppingCartService;
+    private IKillService killService;
 
-    /**
-     * 添加到购物车
-     *
-     * @param shopppingGoodsAddVO
-     * @return
-     */
-    @PostMapping("/add")
-    public R add(@RequestBody ShopppingGoodsAddVO shopppingGoodsAddVO) {
-        shoppingCartService.save(shopppingGoodsAddVO.getSpecGoodsId(), "zs");
-        return R.ok("ok");
+    @PostMapping("/killByDb")
+    public R killByDb(int killId) {
+        return killService.killByDb(killId, "zs");
     }
 
-    /**
-     * 查询购物车内容
-     *
-     * @return
-     */
-    @GetMapping("/list")
-    public R list() {
-        return R.restResult(shoppingCartService.list("zs"), ApiErrorCode.SUCCESS);
+    @PostMapping("/killByLua")
+    public R killByLua(int killId) {
+        return killService.killByLua(killId, "zs");
     }
+
+    @PostMapping("/killByQueue")
+    public R killByQueue(int killId) {
+        return killService.killByQueue(killId, "zs");
+    }
+
 }

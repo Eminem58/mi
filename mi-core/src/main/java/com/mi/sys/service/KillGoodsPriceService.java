@@ -1,7 +1,7 @@
 package com.mi.sys.service;
 
-import com.mi.sys.entity.KillGoodsPrice;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.mi.sys.entity.KillGoodsPrice;
 
 /**
  * <p>

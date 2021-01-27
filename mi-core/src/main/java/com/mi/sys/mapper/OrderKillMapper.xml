@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mi.sys.mapper.OrderKillMapper">
+    <select id="selectOrderCount" resultType="java.lang.Integer">
+        select count(1)
+        from tp_order_kill
+        where user_id = #{userId,jdbcType=VARCHAR}
+        <if test="type != null and type == 1">
+            and order_status in (0,1,2,4)
+        </if>
+        <if test="type != null and type == 2">
+            and order_status = 0
+            and pay_status = 0
+        </if>
+        <if test="type != null and type == 3">
+            and order_status in(0,1)
+            and pay_status = 1
+        </if>
+        <if test="type != null and type == 4">
+            and order_status =3
+        </if>
+    </select>
+</mapper>

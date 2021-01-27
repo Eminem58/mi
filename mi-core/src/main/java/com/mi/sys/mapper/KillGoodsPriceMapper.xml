@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mi.sys.mapper.KillGoodsPriceMapper">
+    <resultMap id="DetailBaseResultMap" type="com.mi.sys.vo.KillGoodsPriceDetailVO">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="spec_goods_id" jdbcType="INTEGER" property="specGoodsId" />
+        <result column="key" jdbcType="VARCHAR" property="key" />
+        <result column="key_name" jdbcType="VARCHAR" property="keyName" />
+        <result column="status" jdbcType="INTEGER" property="status" />
+        <result column="price" jdbcType="DECIMAL" property="price" />
+        <result column="kill_count" jdbcType="INTEGER" property="killCount" />
+        <result column="begain_time" jdbcType="TIMESTAMP" property="begainTime" />
+        <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+        <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
+        <result column="original_img" jdbcType="VARCHAR" property="originalImg" />
+    </resultMap>
+    <update id="updateStock" parameterType="com.mi.sys.entity.KillGoodsPrice">
+        update tp_kill_goods_price
+        <set>
+            <if test="specGoodsId != null">
+                spec_goods_id = #{specGoodsId,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="price != null">
+                price = #{price,jdbcType=DECIMAL},
+            </if>
+            <if test="killCount != null">
+                kill_count = kill_count-#{killCount,jdbcType=INTEGER},
+            </if>
+            <if test="begainTime != null">
+                begain_time = #{begainTime,jdbcType=INTEGER},
+            </if>
+            <if test="endTime != null">
+                end_time = #{endTime,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER} and kill_count > 0
+    </update>
+    <select id="detail" parameterType="java.lang.Integer" resultMap="DetailBaseResultMap">
+        SELECT
+            kgp.id,
+            kgp.spec_goods_id,
+            kgp.status,
+            kgp.price,
+            kgp.kill_count,
+            kgp.begain_time,
+            kgp.end_time,
+            sgp.key,
+            sgp.key_name,
+            g.goods_name,
+            g.original_img
+        FROM
+                tp_kill_goods_price kgp
+        LEFT JOIN tp_spec_goods_price sgp ON sgp.id = kgp.spec_goods_id
+        LEFT JOIN tp_goods g ON sgp.goods_id = g.goods_id
+        where kgp.id = #{id,jdbcType=INTEGER}
+    </select>
+</mapper>

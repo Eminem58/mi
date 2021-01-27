@@ -4,13 +4,16 @@ spring:
   application:
     name: mi-core
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://94.191.83.120:3308/mall?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull
     username: root
     password: root
   data:
     mongodb:
       uri: mongodb://192.168.0.199:27017/mi
+  redis:
+    host: localhost
+    port: 6379
 eureka:
   instance:
     instance-id: ${spring.cloud.client.ip-address}:${server.port}:${spring.application.name}:@project.version@
@@ -19,4 +22,4 @@ eureka:
       defaultZone: http://localhost:7001/eureka
 
 mybatis-plus:
-  mapper-locations: classpath:com/**/*Mapper.xml
+  mapper-locations: classpath:com/mi/**/mapper/*Mapper.xml

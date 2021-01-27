@@ -1,7 +1,8 @@
 package com.mi.sys.mapper;
 
-import com.mi.sys.entity.KillGoodsPrice;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.mi.sys.entity.KillGoodsPrice;
+import com.mi.sys.vo.KillGoodsPriceDetailVO;
 
 /**
  * <p>
@@ -12,5 +13,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2021-01-19
  */
 public interface KillGoodsPriceMapper extends BaseMapper<KillGoodsPrice> {
-
+    int updateStock(KillGoodsPrice record);
+    KillGoodsPriceDetailVO detail(Integer id);
 }

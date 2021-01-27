@@ -1,9 +1,9 @@
 package com.mi.sys.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mi.sys.entity.KillGoodsPrice;
 import com.mi.sys.mapper.KillGoodsPriceMapper;
 import com.mi.sys.service.KillGoodsPriceService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**
