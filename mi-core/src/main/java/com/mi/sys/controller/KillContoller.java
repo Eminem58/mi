@@ -3,9 +3,7 @@ package com.mi.sys.controller;
 import com.baomidou.mybatisplus.extension.api.ApiController;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.mi.sys.service.IKillService;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,7 +33,7 @@ public class KillContoller extends ApiController {
     }
 
     @PostMapping("/submitOrder")
-    public R submitOrder(Long addressId, @Validated @Length(max = 2, message = "最大{max}") int killId) {
+    public R submitOrder(Long addressId, int killId) {
         return killService.submitOrder(addressId, killId, "zs");
     }
 
