@@ -22,7 +22,11 @@ public class GoodsDao {
         return mongoTemplate.findOne(new Query(Criteria.where("specGoodsPriceList._id").is(specGoodsId)), GoodsVO.class, "goods");
     }
 
-    public void save(GoodsVO goods) {
-        mongoTemplate.save(goods, "goods");
+    public GoodsVO findOneById(Integer id) {
+        return mongoTemplate.findOne(new Query(Criteria.where("goodsId").is(id)), GoodsVO.class, "goods");
+    }
+
+    public void save(GoodsVO goodsVO) {
+        mongoTemplate.save(goodsVO, "goods");
     }
 }

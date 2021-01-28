@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mi.sys.mapper.OrderGoodsKillMapper">
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into tp_order_goods_kill (rec_id, order_id, goods_id,spec_goods_id,
+        goods_name, goods_sn, goods_num,
+        market_price, goods_price, cost_price,
+        member_goods_price, give_integral, spec_key,
+        spec_key_name, bar_code, is_comment,
+        prom_type, prom_id, is_send, delivery_id,
+        sku, original_img)
+        values
+        <foreach collection="list" item="goods" separator=",">
+            (#{goods.recId,jdbcType=INTEGER}, #{goods.orderId,jdbcType=INTEGER},
+            #{goods.goodsId,jdbcType=INTEGER},#{goods.specGoodsId,jdbcType=INTEGER},
+            #{goods.goodsName,jdbcType=VARCHAR}, #{goods.goodsSn,jdbcType=VARCHAR}, #{goods.goodsNum,jdbcType=SMALLINT},
+            #{goods.marketPrice,jdbcType=DECIMAL}, #{goods.goodsPrice,jdbcType=DECIMAL},
+            #{goods.costPrice,jdbcType=DECIMAL},
+            #{goods.memberGoodsPrice,jdbcType=DECIMAL}, #{goods.giveIntegral,jdbcType=INTEGER},
+            #{goods.specKey,jdbcType=VARCHAR},
+            #{goods.specKeyName,jdbcType=VARCHAR}, #{goods.barCode,jdbcType=VARCHAR}, #{goods.isComment,jdbcType=BIT},
+            #{goods.promType,jdbcType=BIT}, #{goods.promId,jdbcType=INTEGER}, #{goods.isSend,jdbcType=BIT},
+            #{goods.deliveryId,jdbcType=INTEGER},
+            #{goods.sku,jdbcType=VARCHAR}, #{goods.originalImg,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
+</mapper>

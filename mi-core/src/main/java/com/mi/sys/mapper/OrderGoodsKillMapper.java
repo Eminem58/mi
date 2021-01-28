@@ -1,7 +1,9 @@
 package com.mi.sys.mapper;
 
-import com.mi.sys.entity.OrderGoodsKill;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.mi.sys.entity.OrderGoodsKill;
+
+import java.util.List;
 
 /**
  * <p>
@@ -12,5 +14,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2021-01-19
  */
 public interface OrderGoodsKillMapper extends BaseMapper<OrderGoodsKill> {
-
+    int insertBatch(List<OrderGoodsKill> list);
 }

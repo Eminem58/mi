@@ -1,10 +1,14 @@
 package com.mi.sys.controller;
 
-import org.springframework.web.bind.annotation.*;
-
 import com.baomidou.mybatisplus.extension.api.ApiController;
-
-
+import com.baomidou.mybatisplus.extension.api.R;
+import com.mi.mongo.GoodsDao;
+import com.mi.sys.vo.GoodsVO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 
 /**
@@ -18,5 +22,19 @@ import com.baomidou.mybatisplus.extension.api.ApiController;
 @RestController
 @RequestMapping("/sys/goods")
 public class GoodsController extends ApiController {
+    @Autowired
+    private GoodsDao goodsDao;
+
+    /**
+     * 添加商品
+     *
+     * @param goodsVO
+     * @return
+     */
+    @PostMapping("/add")
+    public R add(@RequestBody GoodsVO goodsVO) {
+        goodsDao.save(goodsVO);
+        return R.ok("ok");
+    }
 }
 

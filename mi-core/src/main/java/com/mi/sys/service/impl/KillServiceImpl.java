@@ -1,8 +1,10 @@
 package com.mi.sys.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baidu.fsg.uid.impl.DefaultUidGenerator;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.mi.lock.RedisLock;
+import com.mi.mq.KillSender;
 import com.mi.sys.entity.KillGoodsPrice;
 import com.mi.sys.mapper.KillGoodsPriceMapper;
 import com.mi.sys.mapper.OrderKillMapper;
@@ -10,6 +12,7 @@ import com.mi.sys.service.IKillByQueueService;
 import com.mi.sys.service.IKillService;
 import com.mi.sys.vo.KiilBeanVO;
 import com.mi.sys.vo.KillGoodsPriceDetailVO;
+import com.mi.sys.vo.OrderKillVO;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
@@ -57,6 +60,10 @@ public class KillServiceImpl implements IKillService {
     private CacheManager cacheManager;
     @Resource
     private IKillByQueueService killByQueueService;
+    @Resource
+    private DefaultUidGenerator defaultUidGenerator;
+    @Resource
+    private KillSender killSender;
 
     /**
      * 预扣库存lua脚本
@@ -181,7 +188,7 @@ public class KillServiceImpl implements IKillService {
         // 脚本里的ARGV参数
         String arg1 = Integer.toString(num);
         // 指定 lua 脚本，并且指定返回值类型
-        DefaultRedisScript<Long> redisScript = new DefaultRedisScript<>(STOCK_LUA, Long.class);
+        DefaultRedisScript<Long> redisScript = new DefaultRedisScript<>(script, Long.class);
         // 参数一：redisScript，参数二：key列表，参数三：arg（可多个）
         return stringRedisTemplate.execute(redisScript, keys, arg1);
     }
@@ -303,5 +310,68 @@ public class KillServiceImpl implements IKillService {
     public R killByQueue(int killId, String userId) {
         killByQueueService.addQueue(new KiilBeanVO(killId, userId));
         return R.ok(null);
+    }
+
+    @Override
+    public R submitOrder(Long addressId, int killId, String userId) {
+        //查询秒杀商品信息
+        KillGoodsPriceDetailVO killGoodsPriceDetailVO = detail(killId);
+        //包装订单信息
+        OrderKillVO orderKillVO = new OrderKillVO();
+        orderKillVO.setKillGoodsPriceDetail(killGoodsPriceDetailVO);
+        orderKillVO.setAddressId(addressId);
+        orderKillVO.setUserId(userId);
+        Long orderId = defaultUidGenerator.getUID();
+        orderKillVO.setOrderId(orderId);
+        System.out.println("===========" + orderId);
+        try {
+            //CorrelationData correlationData = new CorrelationData(UUID.randomUUID().toString());
+            killSender.send(orderKillVO);
+            //消息发送以后order存redis，给前端查询用户订单信息，因为这时候消息可能还没消费，前端需要快速查询到订单信息
+            setOrderToRedis(orderKillVO, orderId, userId);
+            return R.ok(orderId.toString());
+        } catch (Exception e) {
+            //如果异常了，库存要+1，并且秒杀失败
+            e.printStackTrace();
+            String killGoodCountId = "kill_count:" + killId;
+            //库存补偿，返回的数值，执行了lua脚本
+            Long stock = stockByLua(killGoodCountId, 1, STOCK_LUA_INCR);
+            if (stock > 0) {
+                log.info("---------增加库存成功---stock:" + stock);
+            }
+            return R.failed("订单生成失败");
+        }
+    }
+
+    private void setOrderToRedis(OrderKillVO orderKillVO, Long orderId, String userId) {
+        /*BigDecimal totalAmount = new BigDecimal(0);
+        Order order = new Order();
+        order.setOrderId(orderId);
+        order.setOrderSn(sequenceGenerator.getOrderNo());
+        order.setAddTime(System.currentTimeMillis());
+        //设置订单的状态为未确定订单
+        order.setOrderStatus(OrderStatus.UNCONFIRMED.getCode());
+        //未支付
+        order.setPayStatus(PayStatus.UNPAID.getCode());
+        //未发货
+        order.setShippingStatus(ShippingStatus.UNSHIPPED.getCode());
+        //获取发货地址
+        Map map = new HashMap();
+        map.put("addressId", vo.getAddressId());
+        List<UserAddress> userAddresss = userAddressService.selectById(map);
+        BeanUtils.copyProperties(userAddresss.get(0), order);
+        order.setUserId(userId);
+        OrderGoods orderGoods = new OrderGoods();
+        orderGoods.setGoodsName(vo.getKillGoodsSpecPriceDetailVo().getGoodsName());
+        orderGoods.setGoodsPrice(vo.getKillGoodsSpecPriceDetailVo().getPrice());
+        List<OrderGoods> list = new ArrayList<>();
+        list.add(orderGoods);
+        order.setOrderGoodsList(list);
+        totalAmount = totalAmount.add(vo.getKillGoodsSpecPriceDetailVo().getPrice());
+        order.setGoodsPrice(totalAmount);
+        order.setShippingPrice(new BigDecimal(0));
+        order.setOrderAmount(totalAmount.add(order.getShippingPrice()));
+        order.setTotalAmount(totalAmount.add(order.getShippingPrice()));
+        redisTemplate.opsForValue().set(orderId + "", order);*/
     }
 }

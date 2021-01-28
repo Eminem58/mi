@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.api.R;
 import com.mi.sys.vo.KillGoodsPriceDetailVO;
 
 /**
- * 秒杀服务扣减库存
+ * 秒杀服务包括扣减库存
  */
 public interface IKillService {
 
@@ -40,5 +40,12 @@ public interface IKillService {
     R killByRedisLock(int killId, String userId);
 
     R killByQueue(int killId, String userId);
+    /**
+     * 提交订单
+     *
+     * @author 金彪
+     * @date 2021.01.28
+     */
+    R submitOrder(Long addressId, int killId, String userId);
 
 }
