@@ -8,6 +8,7 @@ spring:
     url: jdbc:mysql://94.191.83.120:3308/mall?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull
     username: root
     password: root
+    type: com.zaxxer.hikari.HikariDataSource
     hikari:
       max-lifetime: 10000
   data:

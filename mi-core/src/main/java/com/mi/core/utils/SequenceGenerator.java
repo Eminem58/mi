@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 单据号生成器
  * Created by Ray on 2017/2/17.
+ * 不好用有问题
  */
 @Component
 public class SequenceGenerator {
