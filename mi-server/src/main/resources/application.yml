@@ -1,0 +1,40 @@
+server:
+  port: 1111
+spring:
+  application:
+    name: mi-core
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://94.191.83.120:3308/mall?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&useSSL=false&zeroDateTimeBehavior=convertToNull
+    username: root
+    password: root
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      max-lifetime: 10000
+  data:
+    mongodb:
+      uri: mongodb://192.168.0.199:27017/mi
+  redis:
+    host: localhost
+    port: 6379
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    encoding: UTF-8 #编码
+    suffix: .html #模板后缀
+    mode: HTML #模板
+
+eureka:
+  instance:
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}:${spring.application.name}:@project.version@
+  client:
+    service-url:
+      defaultZone: http://localhost:7001/eureka
+
+mybatis-plus:
+  mapper-locations: classpath:com/mi/**/mapper/*Mapper.xml
