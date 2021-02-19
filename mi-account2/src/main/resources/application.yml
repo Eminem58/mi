@@ -1,0 +1,27 @@
+server:
+  port: 8005
+spring:
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    encoding: UTF-8 #编码
+    suffix: .html #模板后缀
+    mode: HTML #模板
+#  security:
+#    oauth2:
+#      client:
+#        client-secret: 123
+#        client-id: zs
+#        user-authorization-uri: http://localhost:1111/oauth/authorize
+#        access-token-uri: http://localhost:1111/oauth/token
+#      resource:
+#        user-info-uri: http://localhost:1111/user
+#  security.oauth2.client.client-secret=123
+#  security.oauth2.client.client-id=zs
+#  security.oauth2.client.user-authorization-uri=http://localhost:1111/oauth/authorize
+#  security.oauth2.client.access-token-uri=http://localhost:1111/oauth/token
+#  security.oauth2.resource.user-info-uri=http://localhost:1111/user
+#
+#  server.port=1112
+#
+#  server.servlet.session.cookie.name=s1
